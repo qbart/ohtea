@@ -39,7 +39,7 @@ func (l *Loop) OnShutdown(fn func(context.Context)) {
 }
 
 // Run beings main loop.
-func (l *Loop) Run() {
+func (l *Loop) Run(ctx context.Context) {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, l.QuitSignals...)
 
@@ -53,7 +53,7 @@ LOOP:
 		}
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), l.ShutdownTimeout)
+	ctx, cancel := context.WithTimeout(ctx, l.ShutdownTimeout)
 	defer cancel()
 	l.onShutdown(ctx)
 }
